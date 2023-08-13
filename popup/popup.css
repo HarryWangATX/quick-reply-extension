@@ -1,0 +1,18 @@
+.popup-container {
+  width: 500px;
+  height: 550px;
+  text-align: center;
+}
+
+.box {
+  margin: 5px;
+}
+
+button {
+  margin: 5px;
+}
+
+
+.hidden {
+  display: none;
+}

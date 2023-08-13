@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Quick Reply Extension</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="popup-container" id="popup">
+    <h1>Email Reply Extension</h1>
+      <textarea id="emailContent" name="emailContent" rows="15" cols="60" placeholder="Enter email content..."></textarea><br>
+      <button id="sendEmailButton">Send Email with Gmail</button><button id='clearText' class="hidden">Clear Selected Quotes</button><br>
+
+      <button id="showRecipientsButton">Show Details</button> <em>Reload page if unresponsive or incorrect.</em>
+
+    <div id="recipientsList" class="hidden box">
+      <!-- Recipients will be displayed here -->
+    </div>
+
+  </div>
+  <script src="popup.js"></script>
+</body>
+</html>
