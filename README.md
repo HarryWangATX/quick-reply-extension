@@ -48,7 +48,7 @@ export default config;
 ```
 Now, in the credentials page, also generate an OAuth client ID. The `Application Type` is `Chrome Extension`, and you may name it however you would like. The `Item ID` is the `ID` in the image shown below:
 
-![Email Extension Item ID](https://imgur.com/a/TIkpf0X)
+![Email Extension Item ID](https://i.imgur.com/tYfk2OP.png)
 
 After creating the OAuth client ID, copy the client ID given and substitute it in the `client_id` field in `manifest.json`:
 
