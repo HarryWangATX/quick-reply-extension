@@ -9,12 +9,12 @@ We provide two high-level features:
 
 <!-- toc -->
 
-- Installation
-    - Download
-    - Setting up Google OAuth & Gmail API
-- Getting Started
-- Releases and Contribution
-- License
+- [Installation](https://github.com/HarryWangATX/quick-reply-extension/blob/main/README.md#installation)
+    - [Download](https://github.com/HarryWangATX/quick-reply-extension/blob/main/README.md#download)
+    - [Setting up Google OAuth & Gmail API](https://github.com/HarryWangATX/quick-reply-extension/blob/main/README.md#setting-up-google-oauth--gmail-api)
+- [Getting Started](https://github.com/HarryWangATX/quick-reply-extension/blob/main/README.md#getting-started)
+- [Releases and Contribution](https://github.com/HarryWangATX/quick-reply-extension/blob/main/README.md#releases-and-contribution)
+- [License](https://github.com/HarryWangATX/quick-reply-extension/blob/main/README.md#releases-and-contribution)
 
 <!-- tocstop -->
 
@@ -23,7 +23,7 @@ We provide two high-level features:
 
 ### Download
 
-Clone this repository through git: `git clone`
+Clone this repository through git: `git clone https://github.com/HarryWangATX/quick-reply-extension.git`
 
 After cloning go to `chrome://extensions` and click `Load Unpacked` to load the extension. For ease of use, please pin this extension. **NOTE: At this stage, the extension will not work!**
 
