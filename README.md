@@ -25,7 +25,9 @@ We provide two high-level features:
 
 Clone this repository through git: `git clone https://github.com/HarryWangATX/quick-reply-extension.git`
 
-After cloning go to `chrome://extensions` and click `Load Unpacked` to load the extension. For ease of use, please pin this extension. **NOTE: At this stage, the extension will not work!**
+After cloning go to `chrome://extensions` and click `Load Unpacked` to load the extension. For ease of use, please pin this extension. 
+
+**NOTE: At this stage, the extension will not work!**
 
 ### Setting up Google OAuth & Gmail API
 
