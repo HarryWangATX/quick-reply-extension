@@ -105,5 +105,5 @@ If you are planning to contribute new features, please first create an issue and
 
 ## License
 
-This extension has an Apache License 2.0 License, which can be found in the LICENSE file.
+This extension has an Apache License 2.0 License, which can be found in the [LICENSE](https://github.com/HarryWangATX/quick-reply-extension/blob/main/LICENSE) file.
 
