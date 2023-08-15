@@ -10,6 +10,7 @@ We provide two high-level features:
 <!-- toc -->
 
 - [Installation](https://github.com/HarryWangATX/quick-reply-extension/blob/main/README.md#installation)
+    - [Options](https://github.com/HarryWangATX/quick-reply-extension/blob/main/README.md#options)
     - [Download](https://github.com/HarryWangATX/quick-reply-extension/blob/main/README.md#download)
     - [Setting up Google OAuth & Gmail API](https://github.com/HarryWangATX/quick-reply-extension/blob/main/README.md#setting-up-google-oauth--gmail-api)
 - [Getting Started](https://github.com/HarryWangATX/quick-reply-extension/blob/main/README.md#getting-started)
@@ -20,6 +21,14 @@ We provide two high-level features:
 
 
 ## Installation
+
+### Options
+
+There are two different versions of this extensions
+- Google OAuth
+- Node Server Bridge
+
+This current branch is specifically built for Gmail users with Google OAuth. However, for other SMTP mail servers, I have provided a second option located in the [`node_server`](https://github.com/HarryWangATX/quick-reply-extension/tree/node_server) branch. Included in that branch is a bridge that routes a HTTPS request from the chrome extension to the respective SMTP server. The respective set-up guide is located in the [`README.md`](https://github.com/HarryWangATX/quick-reply-extension/tree/node_server#readme) in that branch. This `README.md` will contain the steps to set-up the Google OAuth version of this extension.
 
 ### Download
 
