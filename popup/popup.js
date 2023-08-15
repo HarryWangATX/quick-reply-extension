@@ -66,17 +66,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const sendEmailButton = document.getElementById('sendEmailButton');
 
     // Handle Send Email Logic
-    sendEmailButton.addEventListener('click', async () => {
-      const info = await getAccessToken();
-      const accessToken = info.token;
-      const userInfo = info.userInfo;
-      console.log(accessToken);
-      console.log(userInfo);
-
-
+    sendEmailButton.addEventListener('click', () => {
       const emailContent = emailContentTextarea.value;
 
-      const message = { emailContent, emailInfoFromContent, accessToken, userInfo };
+      const message = { emailContent, emailInfoFromContent };
 
       sendEmailWithGmail(message);
     });
@@ -107,38 +100,6 @@ function sendMessageToBackground(message) {
   return new Promise((resolve) => {
     chrome.runtime.sendMessage(message, (response) => {
       resolve(response);
-    });
-  });
-}
-
-// Function to get the user's access token using chrome.identity.getAuthToken
-function getAccessToken() {
-  return new Promise((resolve, reject) => {
-    chrome.identity.getAuthToken({ interactive: true }, async (token) => {
-      if (chrome.runtime.lastError) {
-        reject(new Error(chrome.runtime.lastError));
-        return;
-      }
-
-      try {
-        const userInfo = await getUserInfo();
-        resolve({ token, userInfo });
-      } catch (error) {
-        reject(error);
-      }
-    });
-  });
-}
-
-
-function getUserInfo() {
-  return new Promise((resolve, reject) => {
-    chrome.identity.getProfileUserInfo((userInfo) => {
-      if (chrome.runtime.lastError) {
-        reject(new Error(chrome.runtime.lastError));
-      } else {
-        resolve(userInfo);
-      }
     });
   });
 }

@@ -1,5 +1,4 @@
 // Listen for messages from the popup
-import config from './config.js';
 let emailInfoFromContent = {};
 let last_quoted = new Set();
 
@@ -35,21 +34,15 @@ function createEmailMessage(emailInfo, emailContent) {
   // Format the email message as required by the Gmail API
   // Return the raw email message string
  
-  let emailBody = '';
-  emailBody += 'To: ' + emailInfo.to.join(', ') + '\n';
-  emailBody += 'Cc: ' + emailInfo.cc.join(', ') + '\n';
-  emailBody += 'Subject: ' + emailInfo.subject + '\n';
-  emailBody += 'In-Reply-To: <' + removeQuotesIfNeeded(emailInfo.inReplyTo) + '>\n';
-  emailBody += 'References: <' + removeQuotesIfNeeded(emailInfo.inReplyTo) +'>\n\n';
+  let emailRet = {
+    to: emailInfo.to.join(', '),
+    cc: emailInfo.cc.join(', '),
+    subject: emailInfo.subject,
+    inReplyTo: `<${removeQuotesIfNeeded(emailInfo.inReplyTo)}>`,
+    text: emailContent += '\n\n====================================================\nReplied with love by Quick Reply Extension :)\n'
+  }
 
-  emailBody += emailContent;
-
-  emailBody += '\n\n====================================================\nReplied with love by Quick Reply Extension :)\n';
-
-  console.log(emailBody);
-  emailBody = btoa(emailBody);
-
-  return emailBody;
+  return emailRet;
 }
 
 chrome.tabs.onActivated.addListener(function(info) {
@@ -90,15 +83,6 @@ chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
   }
 
   if (message.emailContent) {
-    /*
-    const emailInfo = {
-      to: [],
-      cc: [],
-      inReplyTo: '',
-      text: ''
-    };
-    */
-    const accessToken = message.accessToken;
     const emailInfo = message.emailInfoFromContent; // Extracted email information
     const emailContent = message.emailContent; // Content of the email reply
 
@@ -106,27 +90,40 @@ chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
 
     console.log(emailRaw);
 
-
-    let send_fetch_url = `https://gmail.googleapis.com/gmail/v1/users/me/messages/send?key=${config.API_KEY}` 
+    /*
+    var message = {
+      from: `${config['name']} <${config['username']}>`,
+      to: req.body.to,
+      cc: req.body.cc,
+      subject: req.body.subject,
+      inReplyTo: req.body.inReplyTo,
+      text: req.body.text
+    }
+    */ 
+    let send_fetch_url = 'https://localhost:8443/send';
     let send_fetch_options = {
-        method: 'POST',
-        headers: {
-            'Authorization': `Bearer ${accessToken}`,
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-        },
-        body: JSON.stringify({
-            'raw': emailRaw
-        })
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      body: JSON.stringify(emailRaw)
     }
 
-  
     try {
       const response = await fetch(send_fetch_url, send_fetch_options);
       const data = await response.json();
 
-      console.log('Email sent:', data);
-      chrome.runtime.sendMessage({ success: 'success' }); // Sending success response
+      if (data.success) {
+
+        console.log('Email sent:', data);
+        chrome.runtime.sendMessage({ success: 'success' }); // Sending success response
+      }
+      else {
+
+        console.log('Error sending email:', data);
+        chrome.runtime.sendMessage({ success: 'error' }); // Sending success response
+      }
     } catch (error) {
       console.error('Error sending email:', error);
       chrome.runtime.sendMessage({ success: 'error' }); // Sending error response
