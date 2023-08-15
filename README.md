@@ -9,13 +9,13 @@ We provide two high-level features:
 
 <!-- toc -->
 
-- [Installation](https://github.com/HarryWangATX/quick-reply-extension/blob/main/README.md#installation)
-    - [Options](https://github.com/HarryWangATX/quick-reply-extension/blob/main/README.md#options)
-    - [Download](https://github.com/HarryWangATX/quick-reply-extension/blob/main/README.md#download)
-    - [Setting up Google OAuth & Gmail API](https://github.com/HarryWangATX/quick-reply-extension/blob/main/README.md#setting-up-google-oauth--gmail-api)
-- [Getting Started](https://github.com/HarryWangATX/quick-reply-extension/blob/main/README.md#getting-started)
-- [Releases and Contribution](https://github.com/HarryWangATX/quick-reply-extension/blob/main/README.md#releases-and-contribution)
-- [License](https://github.com/HarryWangATX/quick-reply-extension/blob/main/README.md#releases-and-contribution)
+- [Installation](https://github.com/HarryWangATX/quick-reply-extension/tree/main#installation)
+    - [Options](https://github.com/HarryWangATX/quick-reply-extension/tree/main#options)
+    - [Download](https://github.com/HarryWangATX/quick-reply-extension/tree/main#download)
+    - [Setting up Google OAuth & Gmail API](https://github.com/HarryWangATX/quick-reply-extension/tree/main#setting-up-google-oauth--gmail-api)
+- [Getting Started](https://github.com/HarryWangATX/quick-reply-extension/tree/main#getting-started)
+- [Releases and Contribution](https://github.com/HarryWangATX/quick-reply-extension/tree/main#releases-and-contribution)
+- [License](https://github.com/HarryWangATX/quick-reply-extension/tree/main#releases-and-contribution)
 
 <!-- tocstop -->
 
