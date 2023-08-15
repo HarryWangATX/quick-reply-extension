@@ -17,11 +17,7 @@
         "js": ["scripts/content.js"],
         "run_at": "document_end"
       }
-    ],
-    "oauth2": {
-      "client_id": "[170827741999-itkvsn74f40iscfhurlvq3psd77v9rre.apps.googleusercontent.com]",
-      "scopes":["https://www.googleapis.com/auth/gmail.send"]
-    },
+    ]
     "permissions": [
       "identity",
       "activeTab",
