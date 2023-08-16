@@ -1,7 +1,9 @@
 # Quick Reply Extension
 
-<img src="https://i.imgur.com/uCzwy3s.png" heigth="500" width="300">
-<img src="https://i.imgur.com/uOKVVUI.png" height="100" width="300">
+<p float="left">
+    <img src="https://i.imgur.com/uCzwy3s.png" heigth="500" width="300">
+    <img src="https://i.imgur.com/uOKVVUI.png" height="100" width="300">
+</p>
 
 Quick Reply is a Chrome extension that currently supports `lore.kernel.org`'s mirror list and allows for efficient replies right on the website!
 
