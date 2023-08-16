@@ -9,87 +9,38 @@ We provide two high-level features:
 
 <!-- toc -->
 
-- [Installation](https://github.com/HarryWangATX/quick-reply-extension/blob/main/README.md#installation)
-    - [Download](https://github.com/HarryWangATX/quick-reply-extension/blob/main/README.md#download)
-    - [Setting up Google OAuth & Gmail API](https://github.com/HarryWangATX/quick-reply-extension/blob/main/README.md#setting-up-google-oauth--gmail-api)
-- [Getting Started](https://github.com/HarryWangATX/quick-reply-extension/blob/main/README.md#getting-started)
-- [Releases and Contribution](https://github.com/HarryWangATX/quick-reply-extension/blob/main/README.md#releases-and-contribution)
-- [License](https://github.com/HarryWangATX/quick-reply-extension/blob/main/README.md#releases-and-contribution)
+- [Installation](https://github.com/HarryWangATX/quick-reply-extension/tree/node_server#installation)
+    - [Options](https://github.com/HarryWangATX/quick-reply-extension/tree/node_server#options)
+    - [Download](https://github.com/HarryWangATX/quick-reply-extension/tree/node_server#download)
+    - [SMTP Server Config](https://github.com/HarryWangATX/quick-reply-extension/tree/node_server#smtp-server-config)
+- [Getting Started](https://github.com/HarryWangATX/quick-reply-extension/tree/node_server#getting-started)
+- [Releases and Contribution](https://github.com/HarryWangATX/quick-reply-extension/tree/node_server#releases-and-contribution)
+- [License](https://github.com/HarryWangATX/quick-reply-extension/tree/node_server#releases-and-contribution)
 
 <!-- tocstop -->
 
 
 ## Installation
 
+### Options
+
+There are two different versions of this extensions
+- Google OAuth
+- Node Server Bridge
+
+This current branch is specifically built for users outside of Gmail. However, for Gmail users, I have provided a second option located in the [`main`](https://github.com/HarryWangATX/quick-reply-extension) branch. Included in that branch is Google OAuth authentication with Gmail API (easier to setup than this branch's server). The respective set-up guide is located in the [`README.md`](https://github.com/HarryWangATX/quick-reply-extension/#readme) in that branch. This `README.md` will contain the steps to setup the Node.JS bridge for HTTPS request to SMTP email server send.
+
 ### Download
 
-Clone this repository through git: `git clone https://github.com/HarryWangATX/quick-reply-extension.git`
+Clone this repository through git: `git clone https://github.com/HarryWangATX/quick-reply-extension.git`. Checkout this branch, `git checkout node_server`.
 
 After cloning go to `chrome://extensions` and click `Load Unpacked` to load the extension. For ease of use, please pin this extension. 
 
 **NOTE: At this stage, the extension will not work!**
 
-### Setting up Google OAuth & Gmail API
+### SMTP Server Config
 
-Go to [Google Cloud Platforms](https://console.cloud.google.com/), and create a new project, you can name it whatever you'd like.
 
-In [APIs & Services](https://console.cloud.google.com/apis/dashboard), navigate to the `OAuth Consent Screen Page`. Create an OAuth consent screen, and follow its instructions for input fields. Make sure to add your own email to the internal testing user page. In the `Scopes` page, add the following scope:
-
-- `https://www.googleapis.com/auth/gmail.send` → This grants permission to send emails on your behalf.
-
-After adding the OAuth Consent Screen, head back over to the APIs dashboard and use the search bar at the top to find `GMail API` and enable it. Then, go to [Credentials](https://console.cloud.google.com/apis/credentials) and generate an API key. You may choose whether you want to restrict it or not. With the API_KEY, create a file in the root directory of the extension called `config.js` with the following information:
-
-```js
-const config = {
-  API_KEY: "[YOUR_GOOGLE_API_KEY]",
-};
-
-export default config;
-```
-Now, in the credentials page, also generate an OAuth client ID. The `Application Type` is `Chrome Extension`, and you may name it however you would like. The `Item ID` is the `ID` in the image shown below:
-
-![Email Extension Item ID](https://i.imgur.com/tYfk2OP.png)
-
-After creating the OAuth client ID, copy the client ID given and substitute it in the `client_id` field in `manifest.json`:
-
-```json
-{
-    "version": "1.0.0",
-    "manifest_version": 3,
-    "name": "Email Extension",
-    "description": "Quick Email Reply Extension for lore.kernel.org mirror list.",
-    "action": {
-        "default_popup": "popup/popup.html",
-        "default_title": "Email Extension"
-    },
-    "background": {
-      "service_worker": "background.js",
-      "type": "module"
-    },
-    "content_scripts": [
-      {
-        "matches": ["https://lore.kernel.org/*"],
-        "js": ["scripts/content.js"],
-        "run_at": "document_end"
-      }
-    ],
-    "oauth2": {
-      "client_id": "[YOUR_CLIENT_ID_HERE]",
-      "scopes":["https://www.googleapis.com/auth/gmail.send"]
-    },
-    "permissions": [
-      "identity",
-      "activeTab",
-      "tabs",
-      "scripting"
-    ],
-    "host_permissions": [
-      "*://lore.kernel.org/*"
-    ]
-}
-```
-
-Now you have completed the required setup for this extension. Head back to `chrome://extensions` and click the reload button shown to reload the extension. You can now freely use it!
 
 ## Getting Started
 
