@@ -65,11 +65,9 @@ Now, we will generate a private key with passphrase: `openssl genrsa -out CA.key
 
 Next, we can generate the CA certificate and set the expiration time to 10 years: `openssl req -x509 -sha256 -new -nodes -days 3650 -key CA.key -out CA.pem`. You can randomly fill in the information requested.
 
-Inside of `CA` directory, create a directory called `localhost` and `cd` into it. Make a file called `localhost.ext` inside, which will store the information that needs to be written into the SSL Certificate. 
+Inside of `CA` directory, create a directory called `localhost` and `cd` into it. Make a file called `localhost.ext` inside, which will store the information that needs to be written into the SSL Certificate. Include the following in this file. 
 
 ```ext
-// server/cert/CA/localhost/localhost.ext
-
 authorityKeyIdentifier = keyid,issuer
 basicConstraints = CA:FALSE
 keyUsage = digitalSignature, nonRepudiation, keyEncipherment, dataEncipherment
@@ -108,7 +106,7 @@ Your app is now good to go!
 
 ## Getting Started
 
-The main objective of this extension is to make replying to threads on `lore.kernel.org` with ease. To use this extension is quite simple. For a given message that you would like to respond to in a thread, please first click the `reply` button. This allows the extension to scrape the necessary header information. In the reply page, you will be able to highlight multiple bodies of text that you would like to respond to. *Clarification: you may highlight multiple times, the extension will cache all highlights.* Then, click the extension icon in the Chrome bar, and a popup should appear. Make the necessary replies in the text box provided. You can check to make sure email headers are correct with the `Show Details` button. If you want to re-select text, please click the `Clear Selected Quotes` button. If, at any point, the extension is unresponsive or content is incorrect, please refresh the page. If the error persists, please open up an issue in this repository. Once your email content is formulated, click the `Send Email with Gmail` button. The status of the email will be dynamically displayed on this button after send. To re-use this, simply select more text or move to a different message in a thread.
+The main objective of this extension is to make replying to threads on `lore.kernel.org` with ease. To use this extension is quite simple. For a given message that you would like to respond to in a thread, please first click the `reply` button. This allows the extension to scrape the necessary header information. In the reply page, you will be able to highlight multiple bodies of text that you would like to respond to. *Clarification: you may highlight multiple times, the extension will cache all highlights.* Then, click the extension icon in the Chrome bar, and a popup should appear. Make the necessary replies in the text box provided. You can check to make sure email headers are correct with the `Show Details` button. If you want to re-select text, please click the `Clear Selected Quotes` button. If, at any point, the extension is unresponsive or content is incorrect, please refresh the page. If the error persists, please open up an issue in this repository. Once your email content is formulated, click the `Send Email with SMTP` button. The status of the email will be dynamically displayed on this button after send. To re-use this, simply select more text or move to a different message in a thread.
 
 **Important: This extension will only work properly after going into the `reply` link of a message that you want to respond to!**
 
