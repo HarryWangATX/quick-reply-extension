@@ -109,6 +109,8 @@ Now, you are ready to start the server!
 
 ### Starting the Server
 
+Make sure you have Node.JS and NPM installed on the machine. First, run `npm install` to install all the dependencies.
+
 Assuming the same paths were followed during the certificate signing portion, the Node server is ready to go. Run `npm run start` or `node app.js` inside of the `server` directory to start the server. The server must be running in order for the Chrome extension to send the emails.
 
 If the same paths were not followed in the previous section, please modify this portion of the code to the correct path.
