@@ -47,8 +47,8 @@ Create a file called `config.json`, and fill in the information as followed:
 ```json
 {
   "smtp-host": "smtp.your-server.com",
-  "port": [SMTP PORT],
-  "secure": [true/false],
+  "port": [SMTP_PORT],
+  "secure": [true_or_false],
   "name": "[YOUR_FULL_NAME]",
   "username": "[EMAIL_ADDRESS]",
   "app-password": "[APP_PASSWORD]"
