@@ -44,7 +44,7 @@ function createEmailMessage(emailInfo, emailContent) {
 
   emailBody += emailContent;
 
-  emailBody += '\n\n====================================================\nReplied with love by Quick Reply Extension :)\n';
+  emailBody += '\n\n====================================================\nReplied with love by Quick Reply Extension <https://github.com/HarryWangATX/quick-reply-extension> :)\n';
 
   console.log(emailBody);
   emailBody = btoa(emailBody);
