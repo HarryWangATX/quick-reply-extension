@@ -39,7 +39,7 @@ function createEmailMessage(emailInfo, emailContent) {
     cc: emailInfo.cc.join(', '),
     subject: emailInfo.subject,
     inReplyTo: `<${removeQuotesIfNeeded(emailInfo.inReplyTo)}>`,
-    text: emailContent += '\n\n====================================================\nReplied with love by Quick Reply Extension :)\n'
+    text: emailContent += '\n\n====================================================\nReplied with love by Quick Reply Extension <https://github.com/HarryWangATX/quick-reply-extension> :)\n'
   }
 
   return emailRet;
