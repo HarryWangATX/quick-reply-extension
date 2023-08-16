@@ -63,38 +63,12 @@ After creating the OAuth client ID, copy the client ID given and substitute it i
 
 ```json
 {
-    "version": "1.0.0",
-    "manifest_version": 3,
-    "name": "Email Extension",
-    "description": "Quick Email Reply Extension for lore.kernel.org mirror list.",
-    "action": {
-        "default_popup": "popup/popup.html",
-        "default_title": "Email Extension"
-    },
-    "background": {
-      "service_worker": "background.js",
-      "type": "module"
-    },
-    "content_scripts": [
-      {
-        "matches": ["https://lore.kernel.org/*"],
-        "js": ["scripts/content.js"],
-        "run_at": "document_end"
-      }
-    ],
+    ...,
     "oauth2": {
       "client_id": "[YOUR_CLIENT_ID_HERE]",
       "scopes":["https://www.googleapis.com/auth/gmail.send"]
     },
-    "permissions": [
-      "identity",
-      "activeTab",
-      "tabs",
-      "scripting"
-    ],
-    "host_permissions": [
-      "*://lore.kernel.org/*"
-    ]
+    ...
 }
 ```
 
