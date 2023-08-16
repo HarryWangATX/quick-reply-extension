@@ -22,6 +22,7 @@ We provide two high-level features:
     - [Starting the Server](https://github.com/HarryWangATX/quick-reply-extension/tree/node_server#starting-the-server)
 - [Getting Started](https://github.com/HarryWangATX/quick-reply-extension/tree/node_server#getting-started)
 - [Releases and Contribution](https://github.com/HarryWangATX/quick-reply-extension/tree/node_server#releases-and-contribution)
+- [To Dos](https://github.com/HarryWangATX/quick-reply-extension/tree/node_server#to-dos)
 - [License](https://github.com/HarryWangATX/quick-reply-extension/tree/node_server#releases-and-contribution)
 
 <!-- tocstop -->
@@ -134,6 +135,12 @@ I will try to release new features as soon as possible upon request. Please do s
 I appreciate all contributions. If you are planning to contribute bug-fixes, please do so without any further discussion.
 
 If you are planning to contribute new features, please first create an issue and discuss before opening a PR.
+
+## To Dos
+
+- Creating setup scripts to automate the installation process
+- Looking into cleaner SMTP server integration
+- Create an issue to request a feature
 
 ## License
 
