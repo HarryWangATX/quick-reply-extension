@@ -17,7 +17,7 @@
         "js": ["scripts/content.js"],
         "run_at": "document_end"
       }
-    ]
+    ],
     "permissions": [
       "identity",
       "activeTab",
