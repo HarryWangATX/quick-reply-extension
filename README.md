@@ -13,6 +13,8 @@ We provide two high-level features:
     - [Options](https://github.com/HarryWangATX/quick-reply-extension/tree/node_server#options)
     - [Download](https://github.com/HarryWangATX/quick-reply-extension/tree/node_server#download)
     - [SMTP Server Config](https://github.com/HarryWangATX/quick-reply-extension/tree/node_server#smtp-server-config)
+    - [Certificate Signing](https://github.com/HarryWangATX/quick-reply-extension/tree/node_server#certificate-signing)
+    - [Starting the Server](https://github.com/HarryWangATX/quick-reply-extension/tree/node_server#starting-the-server)
 - [Getting Started](https://github.com/HarryWangATX/quick-reply-extension/tree/node_server#getting-started)
 - [Releases and Contribution](https://github.com/HarryWangATX/quick-reply-extension/tree/node_server#releases-and-contribution)
 - [License](https://github.com/HarryWangATX/quick-reply-extension/tree/node_server#releases-and-contribution)
@@ -40,7 +42,69 @@ After cloning go to `chrome://extensions` and click `Load Unpacked` to load the 
 
 ### SMTP Server Config
 
+Create a file called `config.json`, and fill in the information as followed:
 
+```json
+{
+  "smtp-host": "smtp.your-server.com",
+  "port": [SMTP PORT],
+  "secure": [true/false],
+  "name": "[YOUR_FULL_NAME]",
+  "username": "[EMAIL_ADDRESS]",
+  "app-password": "[APP_PASSWORD]"
+}
+```
+
+### Certificate Signing
+
+Now we will self-sign a SSL certificate for `localhost`. If you plan on deploying this server, make sure to use a publicly trusted CA.
+
+First, make a folder called `cert` in `server` directory and `cd` into the folder, and then make another folder `CA` inside of the `cert` folder and `cd` into `CA`.
+
+Now, we will generate a private key with passphrase: `openssl genrsa -out CA.key -des3 2048`.
+
+Next, we can generate the CA certificate and set the expiration time to 10 years: `openssl req -x509 -sha256 -new -nodes -days 3650 -key CA.key -out CA.pem`. You can randomly fill in the information requested.
+
+Inside of `CA` directory, create a directory called `localhost` and `cd` into it. Make a file called `localhost.ext` inside, which will store the information that needs to be written into the SSL Certificate. 
+
+```ext
+// server/cert/CA/localhost/localhost.ext
+
+authorityKeyIdentifier = keyid,issuer
+basicConstraints = CA:FALSE
+keyUsage = digitalSignature, nonRepudiation, keyEncipherment, dataEncipherment
+subjectAltName = @alt_names
+
+[alt_names]
+DNS.1 = localhost
+IP.1 = 127.0.0.1
+```
+Make sure these domains match with the ones in `/etc/hosts`.
+
+Now we will generate another key inside of the `localhost` directory to be used for a Certificate Signing Request: `openssl genrsa -out localhost.key -des3 2048`.
+
+We can generate the CSR with `openssl req -new -key localhost.key -out localhost.csr`, the challenge passphrase can be anything.
+
+To request for the CA to sign the certificate, we will use the  CA Certificate (`CA.pem` and `CA.key`) and the certificate extension file: `localhost.ext`. This will generate a `localhost.crt` valid for ten years.
+
+To decrypt it for our node server, run `openssl rsa -in localhost.key -out localhost.decrypted.key`.
+
+We will use these generated certificate and keys inside of the Node.JS Server.
+
+### Starting the Server
+
+Assuming the same paths were followed during the certificate signing portion, the Node server is ready to go. Run `npm run start` or `node app.js` to start the server. The server must be running in order for the Chrome extension to send the emails.
+
+If the same paths were not followed in the previous section, please modify this portion of the code to the correct path.
+
+```js
+const options = {
+  key: fs.readFileSync('./path/to/your/localhost.decrypted.key'),
+  cert: fs.readFileSync('./path/to/your/localhost/localhost.crt')
+};
+```
+
+Your app is now good to go!
 
 ## Getting Started
 
