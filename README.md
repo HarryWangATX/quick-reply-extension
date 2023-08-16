@@ -20,6 +20,7 @@ We provide two high-level features:
     - [Setting up Google OAuth & Gmail API](https://github.com/HarryWangATX/quick-reply-extension/tree/main#setting-up-google-oauth--gmail-api)
 - [Getting Started](https://github.com/HarryWangATX/quick-reply-extension/tree/main#getting-started)
 - [Releases and Contribution](https://github.com/HarryWangATX/quick-reply-extension/tree/main#releases-and-contribution)
+- [To Dos](https://github.com/HarryWangATX/quick-reply-extension/tree/main#to-dos)
 - [License](https://github.com/HarryWangATX/quick-reply-extension/tree/main#releases-and-contribution)
 
 <!-- tocstop -->
@@ -92,6 +93,12 @@ I will try to release new features as soon as possible upon request. Please do s
 I appreciate all contributions. If you are planning to contribute bug-fixes, please do so without any further discussion.
 
 If you are planning to contribute new features, please first create an issue and discuss before opening a PR.
+
+## To Dos
+
+- Creating setup scripts to automate the installation process
+- Looking into other OAuth Services
+- Create an issue to request a feature
 
 ## License
 
