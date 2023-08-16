@@ -89,9 +89,21 @@ To decrypt it for our node server, run `openssl rsa -in localhost.key -out local
 
 We will use these generated certificate and keys inside of the Node.JS Server.
 
+At this state, Chrome will auto-block any requests sent because this is a self-signed certificate. To trust this certificate, go to `chrome://settings/certificates`. Click the `Authorities` tab.
+
+![Chrome Certificate Authorities Page](https://i.imgur.com/fU8FgNI.png)
+
+Click `import` and select the `CA.pem` file from `server/cert/CA/CA.pem` and check all the checkboxes.
+
+When you go to `https://localhost:8443/` you should see a secured icon. If you changed the listening port, make sure to reflect those changes in the `background.js` file of the extension.
+
+![Chrome Lock Icon](https://i.imgur.com/n2oSEuR.png)
+
+Now, you are ready to start the server!
+
 ### Starting the Server
 
-Assuming the same paths were followed during the certificate signing portion, the Node server is ready to go. Run `npm run start` or `node app.js` to start the server. The server must be running in order for the Chrome extension to send the emails.
+Assuming the same paths were followed during the certificate signing portion, the Node server is ready to go. Run `npm run start` or `node app.js` inside of the `server` directory to start the server. The server must be running in order for the Chrome extension to send the emails.
 
 If the same paths were not followed in the previous section, please modify this portion of the code to the correct path.
 
