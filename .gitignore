@@ -1,1 +1,7 @@
 config.js
+
+server/node_modules/
+
+server/cert/
+
+server/config.json
