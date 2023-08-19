@@ -55,9 +55,9 @@ If you are planning to contribute new features, please first create an issue and
 
 ## To Dos
 
-[x] Creating setup scripts to automate the installation process
-[] Looking into other OAuth Services
-[] Create an issue to request a feature
+- [x] Creating setup scripts to automate the installation process
+- [] Looking into other OAuth Services
+- [] Create an issue to request a feature
 
 ## License
 
