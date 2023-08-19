@@ -16,3 +16,18 @@ button {
 .hidden {
   display: none;
 }
+
+.gear-icon {
+  position: absolute;
+  top: 20px;
+  right: 10px;
+  background-color: #325aa8;
+  padding: 5px;
+  border-radius: 5px;;
+  text-decoration: none;
+  color: white;
+}
+
+#priv {
+  margin: 5px;
+}

@@ -1,8 +1,14 @@
 {
-    "version": "1.0.0",
+    "version": "1.1.0",
     "manifest_version": 3,
-    "name": "Email Extension",
+    "name": "Quick Reply",
     "description": "Quick Email Reply Extension for lore.kernel.org mirror list.",
+    "icons": {
+      "16": "icons/quick_icon_16.png",
+      "32": "icons/quick_icon_32.png",
+      "48": "icons/quick_icon_48.png",
+      "128": "icons/quick_icon_128.png"
+    },
     "action": {
         "default_popup": "popup/popup.html",
         "default_title": "Email Extension"
@@ -18,12 +24,13 @@
         "run_at": "document_end"
       }
     ],
-    "oauth2": {
-      "client_id": "[YOUR_CLIENT_ID]",
-      "scopes":["https://www.googleapis.com/auth/gmail.send"]
+    "options_ui": {
+      "page": "options/options.html",
+      "open_in_tab": false
     },
     "permissions": [
       "identity",
+      "storage",
       "activeTab",
       "tabs",
       "scripting"

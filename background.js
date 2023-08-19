@@ -1,5 +1,4 @@
 // Listen for messages from the popup
-import config from './config.js';
 let emailInfoFromContent = {};
 let last_quoted = new Set();
 
@@ -30,12 +29,13 @@ function removeQuotesIfNeeded(inputString) {
 }
 
 // Function to create the email message
-function createEmailMessage(emailInfo, emailContent) {
+function createEmailMessage(emailInfo, emailContent, name) {
   // Construct the email message using emailInfo and emailContent
   // Format the email message as required by the Gmail API
   // Return the raw email message string
  
   let emailBody = '';
+  emailBody += 'From: ' + name + '\n';
   emailBody += 'To: ' + emailInfo.to.join(', ') + '\n';
   emailBody += 'Cc: ' + emailInfo.cc.join(', ') + '\n';
   emailBody += 'Subject: ' + emailInfo.subject + '\n';
@@ -44,7 +44,7 @@ function createEmailMessage(emailInfo, emailContent) {
 
   emailBody += emailContent;
 
-  emailBody += '\n\n====================================================\nReplied with love by Quick Reply Extension <https://github.com/HarryWangATX/quick-reply-extension> :)\n';
+  emailBody += '\n\n==============================\nReplied with love by Quick Reply Extension\nhttps://github.com/HarryWangATX/quick-reply-extension\n';
 
   console.log(emailBody);
   emailBody = btoa(emailBody);
@@ -71,6 +71,7 @@ chrome.tabs.onActivated.addListener(function(info) {
 });
 
 chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
+  console.log(message);
   if (message.emailInfo) {
     emailInfoFromContent = message.emailInfo;
     console.log(emailInfoFromContent);
@@ -90,24 +91,16 @@ chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
   }
 
   if (message.emailContent) {
-    /*
-    const emailInfo = {
-      to: [],
-      cc: [],
-      inReplyTo: '',
-      text: ''
-    };
-    */
     const accessToken = message.accessToken;
     const emailInfo = message.emailInfoFromContent; // Extracted email information
     const emailContent = message.emailContent; // Content of the email reply
 
-    const emailRaw = createEmailMessage(emailInfo, emailContent);
+    const emailRaw = createEmailMessage(emailInfo, emailContent, message.name);
 
     console.log(emailRaw);
 
 
-    let send_fetch_url = `https://gmail.googleapis.com/gmail/v1/users/me/messages/send?key=${config.API_KEY}` 
+    let send_fetch_url = `https://gmail.googleapis.com/gmail/v1/users/me/messages/send` 
     let send_fetch_options = {
         method: 'POST',
         headers: {
@@ -120,20 +113,31 @@ chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
         })
     }
 
-  
+    console.log("Gmail API: ", send_fetch_url);
     try {
       const response = await fetch(send_fetch_url, send_fetch_options);
       const data = await response.json();
 
       console.log('Email sent:', data);
-      chrome.runtime.sendMessage({ success: 'success' }); // Sending success response
+      if (data.error) {
+        if (data.error.status == "UNAUTHENTICATED") {
+          console.log("unauthorized");
+          chrome.runtime.sendMessage({ clearStorage: true });
+        }
+        else {
+          chrome.runtime.sendMessage({ success: 'error' });
+        }
+      }
+      else {
+        chrome.runtime.sendMessage({ success: 'success' }); // Sending success response
+      }
     } catch (error) {
       console.error('Error sending email:', error);
       chrome.runtime.sendMessage({ success: 'error' }); // Sending error response
     }
 
-    // Perform your email sending logic here
-    // Use "emailInfo" and "emailContent" to send the email
     console.log('Sending email:', emailInfo, emailContent);
   }
+
+  return true;
 });

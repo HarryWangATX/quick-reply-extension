@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="options.css">
+    <script src="options.js"></script>
+</head>
+<body>
+  <div class="container">
+    <h1>Extension Options</h1>
+    <form action="/popup/popup.html" method="get">
+      <label>First Name:</label><br>
+      <input type="text" id="first-name" name="first-name" required><br>
+
+      <label>Last Name:</label><br>
+      <input type="text" id="last-name" name="last-name" required><br>
+
+      <label>Email Address (MUST be same as email used for reply):</label><br>
+      <input type="text" id="email" name="email" required><br>
+
+      <button type="submit" id="save-button">Save</button>
+    </form>
+
+    <a id="back" href="/popup/popup.html">Back</a>
+  </div>
+</body>
+</html>

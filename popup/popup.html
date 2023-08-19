@@ -8,7 +8,13 @@
   <div class="popup-container" id="popup">
     <h1>Email Reply Extension</h1>
       <textarea id="emailContent" name="emailContent" rows="15" cols="60" placeholder="Enter email content..."></textarea><br>
-      <button id="sendEmailButton">Send Email with Gmail</button><button id='clearText' class="hidden">Clear Selected Quotes</button><br>
+      <button id="ack">Acked-by</button>
+      <button id="rev">Reviewed-by</button> 
+      <button id="clearSign" class="hidden">Clear Ack/Rev</button><br>
+
+      <button id="sendEmailButton">Send</button><button id='clearText' class="hidden">Clear Selected Quotes</button><br>
+
+      <p><em>Authentication required every hour. OAuth will close popup, but email will still be sent if information is accurate.</em></p>
 
       <button id="showRecipientsButton">Show Details</button> <em>Reload page if unresponsive or incorrect.</em>
 
@@ -16,7 +22,14 @@
       <!-- Recipients will be displayed here -->
     </div>
 
+
+    <br>
+    <a id="priv" href="https://docs.google.com/document/d/13Jmyf6OhXEaKf_0zGTBQDBLPwAi6PCDl5Cslz2FikRg/edit?usp=sharing">Privacy Policy</a>
+
+    <a href="/options/options.html" class="gear-icon">Settings</a>
+
   </div>
+
   <script src="popup.js"></script>
 </body>
 </html>

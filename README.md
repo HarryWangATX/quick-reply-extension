@@ -40,7 +40,9 @@ This current branch is specifically built for Gmail users with Google OAuth. How
 
 Clone this repository through git: `git clone https://github.com/HarryWangATX/quick-reply-extension.git`
 
-After cloning go to `chrome://extensions` and click `Load Unpacked` to load the extension. For ease of use, please pin this extension. 
+After cloning go to `chrome://extensions` and click `Load Unpacked` to load the extension. For ease of use, please pin this extension.
+
+**This extension is currently under review, in the future, it will be possible to download straight from Chrome Web Store.**
 
 **NOTE: At this stage, the extension will not work!**
 
@@ -54,13 +56,7 @@ In [APIs & Services](https://console.cloud.google.com/apis/dashboard), navigate 
 
 After adding the OAuth Consent Screen, head back over to the APIs dashboard and use the search bar at the top to find `GMail API` and enable it. Then, go to [Credentials](https://console.cloud.google.com/apis/credentials) and generate an API key. You may choose whether you want to restrict it or not. With the API_KEY, create a file in the root directory of the extension called `config.js` with the following information:
 
-```js
-const config = {
-  API_KEY: "[YOUR_GOOGLE_API_KEY]",
-};
 
-export default config;
-```
 Now, in the credentials page, also generate an OAuth client ID. The `Application Type` is `Chrome Extension`, and you may name it however you would like. The `Item ID` is the `ID` in the image shown below:
 
 ![Email Extension Item ID](https://i.imgur.com/tYfk2OP.png)

@@ -14,7 +14,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const showRecipientsButton = document.getElementById('showRecipientsButton');
   const recipientsList = document.getElementById('recipientsList');
-  const emailContentTextarea = document.getElementById('emailContent');
   const clearList = document.getElementById("clearText");
 
   
@@ -36,8 +35,8 @@ document.addEventListener('DOMContentLoaded', () => {
         recipientsList.innerHTML = `
           <h2>Details</h2>
           <p><strong>Subject:</strong> ${emailInfoFromContent.subject} </p>
-          <p><strong>To:</strong> ${emailInfoFromContent.to.join(', ')}</p>
-          <p><strong>CC:</strong> ${emailInfoFromContent.cc.join(', ')}</p>
+          <p><strong>To:</strong> ${emailInfoFromContent.to.join(', ') || ""}</p>
+          <p><strong>CC:</strong> ${emailInfoFromContent.cc.join(', ') || ""}</p>
           <p><strong>In-Reply-To:</strong> ${emailInfoFromContent.inReplyTo}</p>
         `;
         recipientsList.classList.remove('hidden');
@@ -52,6 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
       console.log("Text: ", emailInfoFromContent.text);
       textarea.value = emailInfoFromContent.text.join(''); 
     }
+    
 
     clearList.addEventListener('click', () => {
       chrome.runtime.sendMessage( {clearSelected: true } );
@@ -64,21 +64,88 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Send email button click handler
     const sendEmailButton = document.getElementById('sendEmailButton');
+    const ackButton = document.getElementById('ack');
+    const revButton = document.getElementById('rev');
+    const clearButton = document.getElementById('clearSign');
+
+    textarea.addEventListener('input', () => {
+      const content = textarea.value;
+      const regex = new RegExp('^Acked-by', 'm');
+      const regex2 = new RegExp('^Reviewed-by', 'm');
+      if (regex.test(content) || regex2.test(content)) {
+        clearButton.classList.remove("hidden");
+      }
+      else {
+        if (ackButton.innerText.includes('Ack') && revButton.innerText.includes('Rev')) {
+          ackButton.disabled = false;
+          revButton.disabled = false;
+          clearButton.classList.add("hidden");
+        }
+      }
+    });
+
+    clearButton.addEventListener('click', () => {
+      const regex = new RegExp('^Acked-by.+?$', 'gm');
+      const regex2 = new RegExp('^Reviewed-by.+?$', 'gm');
+
+      textarea.value = textarea.value.replace(regex, '');
+      textarea.value = textarea.value.replace(regex2, '');
+      
+
+      clearButton.classList.add('hidden');
+      ackButton.disabled = false;
+      revButton.disabled = false;
+    });
+
 
     // Handle Send Email Logic
-    sendEmailButton.addEventListener('click', async () => {
-      const info = await getAccessToken();
-      const accessToken = info.token;
-      const userInfo = info.userInfo;
-      console.log(accessToken);
-      console.log(userInfo);
+    try {
+      sendEmailButton.addEventListener('click', sendEmailButtonClicked);
+    }
+    catch(error) {
+      console.log(error);
+    }
+    ackButton.addEventListener('click', async () => {
+      event.preventDefault();
 
+      const infoStored = await checkUserInfoStored();
 
-      const emailContent = emailContentTextarea.value;
+      if (!infoStored) {
+        ackButton.innerText = 'Please configure user info in Options page first!';
+        ackButton.disabled = true;
+        revButton.disabled = true;
+        return;
+      }
 
-      const message = { emailContent, emailInfoFromContent, accessToken, userInfo };
+      const info = await loadUserInfo();
+      const name = `${info.firstName} ${info.lastName} <${info.email}>`;
 
-      sendEmailWithGmail(message);
+      textarea.value += '\nAcked-by: ' + name + '\n';
+
+      ackButton.disabled = true;
+      revButton.disabled = true;
+      clearButton.classList.remove('hidden');
+    });
+    revButton.addEventListener('click', async () => {
+      event.preventDefault();
+
+      const infoStored = await checkUserInfoStored();
+
+      if (!infoStored) {
+        revButton.innerText = 'Please configure user info in Options page first!';
+        revButton.disabled = true;
+        ackButton.disabled = true;
+        return;
+      }
+
+      const info = await loadUserInfo();
+      const name = `${info.firstName} ${info.lastName} <${info.email}>`;
+
+      textarea.value += '\nReviewed-by: ' + name + '\n';
+
+      ackButton.disabled = true;
+      revButton.disabled = true;
+      clearButton.classList.remove('hidden');
     });
 
   });
@@ -93,14 +160,121 @@ document.addEventListener('DOMContentLoaded', () => {
         sendEmailButton.innerText = 'Error! Refresh to try again.';
       }
     }
+    else if (message.clearStorage) {
+      chrome.storage.local.remove('accessToken', () => {
+        if (chrome.runtime.lastError) {
+          console.log(chrome.runtime.lastError);
+        }
+        console.log("cleared");
+        sendEmailButtonClicked();
+      });
+    }
+    return true;
   });
 });
+
+function sendEmailButtonClicked() {
+  try {
+    if (event)
+      event.preventDefault();
+
+    chrome.runtime.sendMessage({ requestEmailInfo: true }, async (response) => {
+      let emailInfoFromContent = response.emailInfoFromContent;
+
+      const infoStored = await checkUserInfoStored();
+
+      if (!infoStored) {
+        const sendEmailButton = document.getElementById('sendEmailButton');
+        sendEmailButton.innerText = 'Please configure user info in Options page first!';
+        sendEmailButton.disabled = true;
+        return;
+      }
+
+      const stored = await checkAccessTokenStored();
+      
+      let accessToken = '';
+      if (stored) {
+        accessToken = await loadTokens();
+      }
+      else {
+        try {
+          accessToken = await getAccessToken();
+          chrome.storage.local.set({accessToken: accessToken});
+        }
+        catch (error) {
+          console.log(error);
+          return;
+        }
+      }
+
+      const info = await loadUserInfo();
+      const name = `${info.firstName} ${info.lastName} <${info.email}>`;
+      
+      console.log(name);
+      console.log(accessToken);
+      
+      const textarea = document.getElementById('emailContent');
+      const emailContent = textarea.value;
+
+      const message = { emailContent, emailInfoFromContent, accessToken, name };
+
+      await sendEmailWithGmail(message);
+    });
+  }
+  catch(error) {
+    console.log(error);
+  }
+}
+
+function checkUserInfoStored() {
+  return new Promise((resolve) => {
+    chrome.storage.local.get(["firstName", "lastName", "email"], (result) => {
+      console.log(result);
+      console.log(!!result.firstName);
+      console.log(!!result.lastName);
+      console.log(!!result.email);
+      resolve(result.firstName && result.lastName && result.email);
+    });
+  });
+}
+
+function loadUserInfo() {
+  return new Promise((resolve) => {
+    chrome.storage.local.get(["firstName", "lastName", "email"], (result) => {
+      resolve(result);
+    });
+  });
+}
+
+function checkAccessTokenStored() {
+  return new Promise((resolve) => {
+    chrome.storage.local.get('accessToken', (result) => {
+      const accessToken = result.accessToken;
+      const accessTokenExists = !!accessToken; // Convert to boolean
+      console.log(accessTokenExists);
+      resolve(accessTokenExists);
+    });
+  });
+}
+
+function loadTokens() {
+  return new Promise((resolve, reject) => {
+    chrome.storage.local.get('accessToken', (result) => {
+      if (chrome.runtime.lastError) {
+        reject(new Error(chrome.runtime.lastError));
+      } else {
+        resolve(result.accessToken);
+      }
+    });
+  });
+}
 
 async function sendEmailWithGmail(message) {
   const sendEmailButton = document.getElementById('sendEmailButton');
   sendEmailButton.disabled = true;
   sendEmailButton.innerText = 'Sending...';
   await sendMessageToBackground(message);
+  return true;
 }
 
 function sendMessageToBackground(message) {
@@ -111,34 +285,57 @@ function sendMessageToBackground(message) {
   });
 }
 
-// Function to get the user's access token using chrome.identity.getAuthToken
-function getAccessToken() {
-  return new Promise((resolve, reject) => {
-    chrome.identity.getAuthToken({ interactive: true }, async (token) => {
-      if (chrome.runtime.lastError) {
-        reject(new Error(chrome.runtime.lastError));
-        return;
-      }
-
-      try {
-        const userInfo = await getUserInfo();
-        resolve({ token, userInfo });
-      } catch (error) {
-        reject(error);
-      }
-    });
-  });
+function extractAccessTokenFromUrl(url) {
+  const accessTokenParam = 'access_token=';
+  const startIndex = url.indexOf(accessTokenParam);
+  if (startIndex !== -1) {
+    const endIndex = url.indexOf('&', startIndex);
+    if (endIndex !== -1) {
+      const accessToken = url.substring(startIndex + accessTokenParam.length, endIndex);
+      return accessToken;
+    } else {
+      return url.substring(startIndex + accessTokenParam.length);
+    }
+  }
+  return null;
 }
 
+// Function to get the user's access token using chrome.identity.getAuthToken
+function getAccessToken() {
+  let auth_url = 'https://accounts.google.com/o/oauth2/auth';
+  let client_id = '170827741999-7m3e74go29qa2ph9efhq2ejdtj3q5n65.apps.googleusercontent.com';
+  let redirect_url = chrome.identity.getRedirectURL("oauth2");
+  let auth_params = {
+    client_id: client_id,
+    redirect_uri: redirect_url,
+    response_type: 'token',
+    scope: ['https://www.googleapis.com/auth/gmail.send']
+  }
 
-function getUserInfo() {
+  console.log(redirect_url);
+
+  const url = new URLSearchParams(auth_params).toString();
+  auth_url += '?' + url;
+
+  console.log(auth_url);
+
   return new Promise((resolve, reject) => {
-    chrome.identity.getProfileUserInfo((userInfo) => {
-      if (chrome.runtime.lastError) {
-        reject(new Error(chrome.runtime.lastError));
-      } else {
-        resolve(userInfo);
-      }
-    });
+    try {
+      chrome.identity.launchWebAuthFlow({url: auth_url, interactive: true}, (responseUrl) => {
+        console.log(responseUrl);
+
+        const token = extractAccessTokenFromUrl(responseUrl);
+
+        if (token) {
+          resolve(token);
+        }
+        else {
+          reject(new Error("Access token not found in the response"));
+        }
+      });
+    }
+    catch (error) {
+      reject(error);
+    }
   });
 }
